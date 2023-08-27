@@ -1,6 +1,9 @@
 # txt-appraisal
 
 .env
+data
+# File with credentials to Azure.
+sample_analyze_layout_with_credentials.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
