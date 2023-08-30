@@ -22,10 +22,9 @@ def format_polygon(polygon):
     return ", ".join(["[{}, {}]".format(p.x, p.y) for p in polygon])
 
 
-def analyze_read():
+def analyze_read(formUrl):
     # sample document
     # formUrl = "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-REST-api-samples/master/curl/form-recognizer/rest-api/read.png"
-    formUrl = "https://kaustlibrary.blob.core.windows.net/appraisal/01-00-~1.PDF"
 
     document_analysis_client = DocumentAnalysisClient(
         endpoint=endpoint, credential=AzureKeyCredential(key)
@@ -72,10 +71,9 @@ def analyze_read():
     print("----------------------------------------")
 
 
-def analyze_general_documents():
+def analyze_general_documents(docUrl):
     # sample document
     # docUrl = "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-REST-api-samples/master/curl/form-recognizer/sample-layout.pdf"
-    docUrl = "https://kaustlibrary.blob.core.windows.net/appraisal/01-00-~1.PDF"
 
     # create your `DocumentAnalysisClient` instance and `AzureKeyCredential` variable
     document_analysis_client = DocumentAnalysisClient(endpoint=endpoint, credential=AzureKeyCredential(key))
@@ -174,9 +172,11 @@ def analyze_general_documents():
 if __name__ == "__main__":
     model = sys.argv[1]
 
+    doc_url = sys.argv[2]
+
     if model == 'read':
-        analyze_read()
+        analyze_read(doc_url)
     elif model == 'document':    
-        analyze_general_documents()
+        analyze_general_documents(doc_url)
     else:
         print("Not implemented yet! Bye...")
