@@ -1,5 +1,6 @@
 # import libraries
 
+import sys
 import os
 from dotenv import load_dotenv
 from azure.ai.formrecognizer import DocumentAnalysisClient
@@ -21,9 +22,60 @@ def format_polygon(polygon):
     return ", ".join(["[{}, {}]".format(p.x, p.y) for p in polygon])
 
 
+def analyze_read():
+    # sample document
+    # formUrl = "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-REST-api-samples/master/curl/form-recognizer/rest-api/read.png"
+    formUrl = "https://kaustlibrary.blob.core.windows.net/appraisal/01-00-~1.PDF"
+
+    document_analysis_client = DocumentAnalysisClient(
+        endpoint=endpoint, credential=AzureKeyCredential(key)
+    )
+
+    poller = document_analysis_client.begin_analyze_document_from_url(
+        "prebuilt-read", formUrl
+    )
+    result = poller.result()
+
+    print("Document contains content: ", result.content)
+
+    for idx, style in enumerate(result.styles):
+        print(
+            "Document contains {} content".format(
+                "handwritten" if style.is_handwritten else "no handwritten"
+            )
+        )
+
+    for page in result.pages:
+        print("----Analyzing Read from page #{}----".format(page.page_number))
+        print(
+            "Page has width: {} and height: {}, measured with unit: {}".format(
+                page.width, page.height, page.unit
+            )
+        )
+
+        for line_idx, line in enumerate(page.lines):
+            print(
+                "...Line # {} has text content '{}' within bounding box '{}'".format(
+                    line_idx,
+                    line.content,
+                    format_polygon(line.polygon),
+                )
+            )
+
+        for word in page.words:
+            print(
+                "...Word '{}' has a confidence of {}".format(
+                    word.content, word.confidence
+                )
+            )
+
+    print("----------------------------------------")
+
+
 def analyze_general_documents():
     # sample document
-    docUrl = "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-REST-api-samples/master/curl/form-recognizer/sample-layout.pdf"
+    # docUrl = "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-REST-api-samples/master/curl/form-recognizer/sample-layout.pdf"
+    docUrl = "https://kaustlibrary.blob.core.windows.net/appraisal/01-00-~1.PDF"
 
     # create your `DocumentAnalysisClient` instance and `AzureKeyCredential` variable
     document_analysis_client = DocumentAnalysisClient(endpoint=endpoint, credential=AzureKeyCredential(key))
@@ -120,4 +172,11 @@ def analyze_general_documents():
 
 
 if __name__ == "__main__":
-    analyze_general_documents()
+    model = sys.argv[1]
+
+    if model == 'read':
+        analyze_read()
+    elif model == 'document':    
+        analyze_general_documents()
+    else:
+        print("Not implemented yet! Bye...")
