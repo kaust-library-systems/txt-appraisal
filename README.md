@@ -29,3 +29,10 @@ To read the `.env` file
 ## Environment Variables
 
 Setting the environment variables `KEY` and `ENDPOINT` in an external file `.env`.
+
+
+## Running the Script
+
+```
+(txt-appraisal) PS C:\Users\garcm0b\Work\txt-appraisal> python .\doc_intel_quickstart.py read https://kaustlibrary.blob.core.windows.net/appraisal/01-00-00-002-0001_KAUST_BYLAWS_10-25-06.pdf
+```
