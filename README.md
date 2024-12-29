@@ -1,5 +1,8 @@
 # txt-appraisal
 
+> Note: Archiving this repository since we are not longer working on this.
+> Marcelo, 2024-12-29
+
 Using [Azure Document Intelligence](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview?view=doc-intel-3.1.0) to process docuemnst.
  
 ## Requirements
